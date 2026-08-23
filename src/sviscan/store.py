@@ -24,20 +24,35 @@ __all__ = [
 _BASE = "https://www.deribit.com/api/v2/public"
 
 
-def fetch_chain(currency: str = "BTC", depth: int = 5) -> list[dict]:
-    """All live option quotes normalized: (expiry_s, strike, iv_bid, iv_ask, mark_iv, spot)."""
+def fetch_chain(currency: str = "BTC", n_expiries: int = 3) -> list[dict]:
+    """Live option quotes for the nearest `n_expiries` maturities.
+
+    ponytail: one ticker call per instrument, serial; concurrent fan-out is a
+    drop-in upgrade if scan latency ever matters.
+    """
     now_ms = time.time() * 1000
     with httpx.Client(timeout=30) as c:
         instruments = c.get(f"{_BASE}/get_instruments", params={"currency": currency, "kind": "option"}).json()["result"]
+        live = [i for i in instruments if i["expiration_timestamp"] >= now_ms + 6 * 3600e3]
+        live.sort(key=lambda i: i["expiration_timestamp"])
+        # take all strikes of each of the first n_expiries distinct dates
+        seen_dates: list[int] = []
+        selected = []
+        for ins in live:
+            d = ins["expiration_timestamp"]
+            if len(seen_dates) < n_expiries or d in seen_dates:
+                if d not in seen_dates:
+                    seen_dates.append(d)
+                selected.append(ins)
         out: dict[tuple, dict] = {}
-        for ins in instruments:
-            if ins["expiration_timestamp"] < now_ms + 6 * 3600e3:
-                continue  # skip expiring within 6h
+        for ins in selected:
             ticker = c.get(f"{_BASE}/ticker", params={"instrument_name": ins["instrument_name"]}).json()["result"]
             bid_iv, ask_iv = ticker.get("bid_iv"), ticker.get("ask_iv")
             if bid_iv is None or ask_iv is None or bid_iv <= 0 or ask_iv <= 0:
                 continue
-            key = (ins["expiration_timestamp"] / 1000.0, float(ins["strike"]))
+            # Deribit timestamps are ms; T = years to maturity
+            ttm_years = (ins["expiration_timestamp"] / 1000.0 - now_ms / 1000.0) / (365 * 24 * 3600)
+            key = (ttm_years, float(ins["strike"]))
             rec = out.setdefault(key, {"T": key[0], "K": key[1],
                                        "iv_bid": bid_iv / 100.0,
                                        "iv_ask": ask_iv / 100.0,

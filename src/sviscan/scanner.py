@@ -7,11 +7,11 @@ import itertools
 import numpy as np
 
 from .svi import (
-    calendar_ok,
     find_butterfly_violations,
     find_calendar_violations,
     fit_slice,
     g_function,
+    svi_w,
 )
 
 __all__ = ["build_slices", "scan_surface"]
@@ -68,12 +68,9 @@ def scan_surface(slices: dict[float, dict], rmse_gate: float = 0.004,
         if s1["rmse"] > rmse_gate or s2["rmse"] > rmse_gate:
             continue
         bad_k = find_calendar_violations(s1["params"], s2["params"], kgrid)
-        if not bad_k.size and not calendar_ok(s1["params"], s2["params"], k_span):
-            bad_k = kgrid[:0]  # defensive; detectors should agree
         if bad_k.size:
-            worst = float(np.max(
-                s1["w"].max() - s2["w"].max()))  # crude severity proxy
+            gaps = svi_w(bad_k, s1["params"]) - svi_w(bad_k, s2["params"])
             alerts.append({"kind": "calendar", "T_short": t1, "T_long": t2,
                            "k_min": float(bad_k.min()), "k_max": float(bad_k.max()),
-                           "severity": max(worst, 0.0)})
+                           "severity": float(np.max(gaps))})
     return alerts
