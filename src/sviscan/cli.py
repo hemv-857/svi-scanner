@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import time
+from pathlib import Path
 
 from .scanner import build_slices, scan_surface
 from .store import (
@@ -30,11 +32,15 @@ def _scan(args):
     slices = build_slices(quotes)
     print(f"built {len(slices)} expiry slices")
     alerts = scan_surface(slices, rmse_gate=args.gate)
-    for a in alerts:
-        aid = log_alert(con, a["kind"], a["T_short"] or 0.0, a["T_long"] or 0.0,
-                        a["k_min"], a["k_max"], a["severity"])
-        print(f"[{aid}] {a['kind']}: T={a['T_long'] or a['T_short']:.3f} "
-              f"k=[{a['k_min']:.2f},{a['k_max']:.2f}] severity={a['severity']:.5f}")
+    jsonl_path = Path(args.db).parent / "alerts.jsonl"
+    with open(jsonl_path, "a") as jl:
+        for a in alerts:
+            aid = log_alert(con, a["kind"], a["T_short"] or 0.0, a["T_long"] or 0.0,
+                            a["k_min"], a["k_max"], a["severity"])
+            rec = {"id": aid, "detected_at": time.time(), **a}
+            jl.write(json.dumps(rec) + "\n")
+            print(f"[{aid}] {a['kind']}: T={a['T_long'] or a['T_short']:.3f} "
+                  f"k=[{a['k_min']:.2f},{a['k_max']:.2f}] severity={a['severity']:.5f}")
     if not alerts:
         print("no violations detected")
     resolve_alerts(con, older_than_sec=7 * 86400)

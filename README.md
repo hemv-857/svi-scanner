@@ -32,6 +32,17 @@ then read `report` as your findings memo.
 - A clean two-expiry synthetic surface produces **zero** hard alerts
 - Corrupted quotes trip the RMSE gate instead of producing phantom arbs
 
+## Automation (accumulating history)
+
+The repo ships two schedulers for the same scan cycle:
+
+- **GitHub Actions** (`.github/workflows/scheduled-scan.yml`): every 6h, runs a
+  live scan and commits `data/alerts.jsonl` back to the repo. Free, no server.
+- **launchd** (`dev/com.hemang.sviscan.plist`): local timer, same cadence.
+
+After a few weeks, `sviscan report` is your findings memo: violation counts by
+type, open share (persistence), average severity.
+
 ## Honest scope
 
 - `ponytail:` raw SVI per slice; eSSVI/joint-surface fitting is the upgrade when
