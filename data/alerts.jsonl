@@ -44,3 +44,4 @@
 {"id": 2, "detected_at": 1788108294.2995446, "kind": "calendar", "T_short": 0.001742, "T_long": 0.004482, "k_min": -0.35, "k_max": -0.05499999999999999, "severity": 0.3040751439787435}
 {"id": 3, "detected_at": 1788108294.300325, "kind": "calendar", "T_short": 0.004482, "T_long": 0.007221, "k_min": -0.35, "k_max": 0.35, "severity": 0.014892678775413016}
 {"id": 1, "detected_at": 1788124285.4468462, "kind": "butterfly", "T_short": 0.006714, "T_long": null, "k_min": -0.32999999999999996, "k_max": -0.205, "severity": 0.010709923491485203}
+{"id": 1, "detected_at": 1788154964.5787528, "kind": "butterfly", "T_short": 0.008481, "T_long": null, "k_min": -0.35, "k_max": -0.22499999999999998, "severity": 0.01268396262767308}
