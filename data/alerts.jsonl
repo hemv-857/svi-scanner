@@ -75,3 +75,6 @@
 {"id": 2, "detected_at": 1788539165.67656, "kind": "butterfly", "T_short": 0.004517, "T_long": null, "k_min": 0.20000000000000007, "k_max": 0.35, "severity": 0.008016991082785363}
 {"id": 3, "detected_at": 1788539165.6771972, "kind": "calendar", "T_short": 0.001778, "T_long": 0.004517, "k_min": -0.35, "k_max": -0.044999999999999984, "severity": 0.3662761589644113}
 {"id": 4, "detected_at": 1788539165.6779277, "kind": "calendar", "T_short": 0.004517, "T_long": 0.007257, "k_min": 0.135, "k_max": 0.35, "severity": 0.0027202675117799086}
+{"id": 1, "detected_at": 1788554950.6185575, "kind": "butterfly", "T_short": 0.004017, "T_long": null, "k_min": 0.06500000000000006, "k_max": 0.15500000000000003, "severity": 0.026419952184543655}
+{"id": 2, "detected_at": 1788554950.6296725, "kind": "butterfly", "T_short": 0.006757, "T_long": null, "k_min": 0.265, "k_max": 0.35, "severity": 0.0014938507235898735}
+{"id": 3, "detected_at": 1788554950.6323283, "kind": "calendar", "T_short": 0.004017, "T_long": 0.006757, "k_min": 0.07, "k_max": 0.22999999999999998, "severity": 0.0003972718881577412}
