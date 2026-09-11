@@ -120,3 +120,4 @@
 {"id": 1, "detected_at": 1789039604.2147257, "kind": "calendar", "T_short": 0.002347, "T_long": 0.005087, "k_min": -0.35, "k_max": 0.35, "severity": 0.10422481298172849}
 {"id": 1, "detected_at": 1789057736.7997222, "kind": "calendar", "T_short": 0.001772, "T_long": 0.004512, "k_min": 0.09000000000000002, "k_max": 0.35, "severity": 0.11780354395252185}
 {"id": 2, "detected_at": 1789057736.8005998, "kind": "calendar", "T_short": 0.004512, "T_long": 0.007252, "k_min": -0.35, "k_max": -0.21999999999999997, "severity": 0.035483585276797056}
+{"id": 1, "detected_at": 1789102032.6285672, "kind": "calendar", "T_short": 0.005847, "T_long": 0.008587, "k_min": -0.35, "k_max": 0.35, "severity": 0.016091043857123784}
