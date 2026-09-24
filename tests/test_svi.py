@@ -1,5 +1,6 @@
 import numpy as np
 import pytest
+from scipy.stats import norm
 
 from sviscan.scanner import build_slices, scan_surface
 from sviscan.svi import (
@@ -65,7 +66,7 @@ def _synthetic_quotes() -> list[dict]:
     spot = 100.0
     base_iv = {30 * 86400: 0.55, 90 * 86400: 0.60}
     for T_sec, iv0 in base_iv.items():
-        T = T_sec / 365.0 / 24.0  # ~years-ish scale irrelevant for consistency
+        T = T_sec / (365.0 * 24.0 * 3600.0)  # seconds -> years to maturity (30d ~= 0.082y)
         for strike in np.linspace(70, 130, 13):
             k = np.log(strike / spot)
             iv = iv0 * (1 - 0.35 * k + 1.2 * k * k)
@@ -86,14 +87,62 @@ def test_scanner_reports_no_false_positives_on_clean_surface():
 
 def test_scanner_skips_bad_fits_with_explicit_alert():
     quotes = _synthetic_quotes()
-    # corrupt one expiry so its fit is garbage
+    # corrupt the SHORT expiry so its fit is garbage. (T is years-to-maturity:
+    # 30d ~= 0.082y, 90d ~= 0.247y — select by the smallest T rather than a
+    # hardcoded absolute, which is what silently broke when the fixture's
+    # seconds->years conversion was corrected.)
+    short_T = min(q["T"] for q in quotes)
     for q in quotes:
-        if q["T"] < 0.002:
+        if q["T"] == short_T:
             q["iv_bid"], q["iv_ask"] = q["iv_bid"] * 3, q["iv_ask"] * 3 + 0.05
     slices = build_slices(quotes)
     alerts = scan_surface(slices, rmse_gate=1e-4)
     kinds = {a["kind"] for a in alerts}
     assert "bad_fit" in kinds
+
+
+# ------------------------------------------------------------------ oracle
+# Independent correctness gate: no-butterfly-arbitrage must agree with the true
+# risk-neutral density from Breeden-Litzenberger (g_function is a closed-form
+# rearrangement; the oracle below is finite differences on call prices).
+
+_F = 100.0
+
+
+def _call_price(K, w):
+    k = np.log(K / _F)
+    d1 = -k / np.sqrt(w) + np.sqrt(w) / 2.0
+    return _F * norm.cdf(d1) - K * norm.cdf(d1 - np.sqrt(w))
+
+
+def _density_fd(params, ks, h=1e-3):
+    """q(k) = K * d2C/dK2 via central differences; positive iff no arb."""
+    q = np.empty_like(ks)
+    for i, k in enumerate(ks):
+        K = _F * np.exp(k)
+        lo, hi = K * (1 - h), K * (1 + h)
+        q[i] = K * (_call_price(lo, svi_w(np.log(lo / _F), params))
+                    - 2 * _call_price(K, svi_w(k, params))
+                    + _call_price(hi, svi_w(np.log(hi / _F), params))) / ((K * h) ** 2)
+    return q
+
+
+@pytest.mark.parametrize("params", [
+    np.array([0.032, 0.08, -0.55, 0.02, 0.12]),            # clean fitted slice
+    np.array([0.02, 0.9, 0.1, 0.05, 0.03]),                 # sharp smile, arbed
+    np.array([0.05, 0.9, 0.0, 0.0, 0.01]),                  # repo arbed example
+    np.array([0.04, 0.9, -0.6, -0.05, 0.02]),               # steep asymmetric
+])
+def test_g_function_sign_matches_density_oracle(params):
+    ks = np.linspace(-0.5, 0.5, 201)
+    g = g_function(ks, params)
+    q = _density_fd(params, ks)
+    # g must never claim a violation where the true density is positive
+    assert not np.any((g < 0) & (q > 1e-9)), "g_function false positive"
+    # and must flag (as arbed) most of what the density flags
+    flagged = q < -1e-9
+    if flagged.any():
+        assert np.sum(g < 0) >= 0.8 * np.sum(flagged), "g_function misses real arbs"
 
 
 if __name__ == "__main__":
