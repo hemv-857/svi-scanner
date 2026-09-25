@@ -216,3 +216,5 @@
 {"id": 3, "detected_at": 1790250811.4801495, "kind": "calendar", "T_short": 0.005036, "T_long": 0.007776, "k_min": -0.35, "k_max": 0.35, "severity": 0.0049775480624358465}
 {"id": 1, "detected_at": 1790270201.9520192, "kind": "calendar", "T_short": 0.001682, "T_long": 0.004421, "k_min": -0.35, "k_max": 0.35, "severity": 0.1466692363984536}
 {"id": 2, "detected_at": 1790270201.952714, "kind": "calendar", "T_short": 0.004421, "T_long": 0.007161, "k_min": 0.07, "k_max": 0.35, "severity": 0.0014933487226512464}
+{"id": 1, "detected_at": 1790312604.7343338, "kind": "calendar", "T_short": 0.003077, "T_long": 0.005816, "k_min": 0.08500000000000002, "k_max": 0.35, "severity": 0.0009335369658844432}
+{"id": 2, "detected_at": 1790312604.7354624, "kind": "calendar", "T_short": 0.005816, "T_long": 0.008556, "k_min": 0.16500000000000004, "k_max": 0.35, "severity": 0.00027844491286535544}
