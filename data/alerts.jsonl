@@ -249,3 +249,4 @@
 {"id": 3, "detected_at": 1790604259.4253132, "kind": "calendar", "T_short": 0.002047, "T_long": 0.004787, "k_min": -0.35, "k_max": 0.35, "severity": 0.007361863057773463}
 {"id": 4, "detected_at": 1790604259.4259562, "kind": "calendar", "T_short": 0.004787, "T_long": 0.007527, "k_min": -0.35, "k_max": 0.35, "severity": 0.005188871249197646}
 {"id": 1, "detected_at": 1790637609.042508, "kind": "calendar", "T_short": 0.00099, "T_long": 0.003729, "k_min": -0.35, "k_max": 0.35, "severity": 0.002978623043647669}
+{"id": 1, "detected_at": 1790660948.236099, "kind": "calendar", "T_short": 0.002989, "T_long": 0.005729, "k_min": -0.35, "k_max": 0.35, "severity": 0.04969018108151533}
