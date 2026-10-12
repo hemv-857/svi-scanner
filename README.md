@@ -69,6 +69,10 @@ type, open share (persistence), average severity.
 - Severity is currently magnitude-based (min g, max w-gap); P&L attribution of
   each signal comes after enough logged history exists.
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## License
 
 [LICENSE](https://github.com/hemv-857/svi-scanner/blob/master/LICENSE) — see the file for the full text.
