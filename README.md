@@ -1,5 +1,7 @@
 # svi-scanner
 
+<a href="https://github.com/hemv-857/svi-scanner/actions/workflows/ci.yml"><img src="https://github.com/hemv-857/svi-scanner/actions/workflows/ci.yml/badge.svg" alt="svi-scanner CI"></a> <a href="https://github.com/hemv-857/svi-scanner/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a> <img src="https://img.shields.io/badge/Python-3776AB.svg" alt="Python">
+
 **SVI volatility surfaces** from live Deribit option chains, scanned for
 no-arbitrage violations and logged over time:
 
@@ -66,3 +68,7 @@ type, open share (persistence), average severity.
   calendar violations between *fits* need finer separation from fit noise.
 - Severity is currently magnitude-based (min g, max w-gap); P&L attribution of
   each signal comes after enough logged history exists.
+
+## License
+
+[LICENSE](https://github.com/hemv-857/svi-scanner/blob/master/LICENSE) — see the file for the full text.
