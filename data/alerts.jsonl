@@ -327,3 +327,5 @@
 {"id": 1, "detected_at": 1792298443.3170316, "kind": "calendar", "T_short": 0.00312, "T_long": 0.005859, "k_min": 0.06500000000000006, "k_max": 0.35, "severity": 0.001971042119837618}
 {"id": 1, "detected_at": 1792322145.44839, "kind": "calendar", "T_short": 0.005108, "T_long": 0.007847, "k_min": 0.08000000000000002, "k_max": 0.35, "severity": 0.0023974462554966244}
 {"id": 1, "detected_at": 1792338940.3102272, "kind": "calendar", "T_short": 0.004575, "T_long": 0.007315, "k_min": 0.07, "k_max": 0.35, "severity": 0.0022275548086522095}
+{"id": 1, "detected_at": 1792385334.06934, "kind": "calendar", "T_short": 0.003104, "T_long": 0.005843, "k_min": 0.08500000000000002, "k_max": 0.35, "severity": 0.001227809917218279}
+{"id": 2, "detected_at": 1792385334.0703557, "kind": "calendar", "T_short": 0.005843, "T_long": 0.008583, "k_min": 0.15000000000000002, "k_max": 0.35, "severity": 0.00042661071954847875}
